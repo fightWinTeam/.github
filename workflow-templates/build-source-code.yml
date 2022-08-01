@@ -1,0 +1,92 @@
+# This workflow will build a package using Maven and then publish it to jfrog artifactory when a release is created
+name: build-source-code
+
+on:
+  workflow_dispatch:
+    inputs:
+      JAR_VERSION:
+        description: "jar version"
+        required: true
+        type: string
+        default: 0.0.1-SNAPSHOT
+
+  workflow_call:
+    inputs:
+      JAR_VERSION:
+        description: "jar version"
+        required: true
+        type: string
+
+jobs:
+  build-source-code-job:
+
+    runs-on: [self-hosted]
+    steps:
+    
+    - name: uppercase
+      id: uppercase
+      run: |
+        GITHUB_USER_ACCOUNT=$(echo $GITHUB_ACTOR | tr '[a-z]' '[A-Z]')
+        echo "::set-output name=uppercase_account::$(echo $GITHUB_USER_ACCOUNT)"
+      
+    - name: Checkout source code
+      id: build-checkout-source-code
+      uses: actions/checkout@v2
+      with:
+        path: ${{ steps.uppercase.outputs.uppercase_account }}
+      
+    - name: Checkout source code result
+      id: build-checkout-source-code-result
+      if: always() && (steps.build-checkout-source-code.outcome != 'skipped')
+      run: |
+        if [[ '${{ steps.build-checkout-source-code.outcome }}' == 'success' ]]
+          then 
+            echo 'Checkout source code success.'
+            echo 'The address of checkout is ${{ github.workspace }}/${{ steps.uppercase.outputs.uppercase_account }}.'
+            echo 'Next step will build source code.'
+          else 
+              echo 'Checkout source code failure.'
+        fi
+      
+    - name: run outputs
+      id: env
+      run: |
+        # The file owner has read, write, and execute permissions.The owner's group and other users have read-only permission.
+        chmod 744 ${{ github.workspace }}/${{ steps.uppercase.outputs.uppercase_account }}/.github/script/run.sh
+        ${{ github.workspace }}/${{ steps.uppercase.outputs.uppercase_account }}/.github/script/run.sh ${{ github.workspace }}/${{ steps.uppercase.outputs.uppercase_account }} build-source-code
+      shell: bash
+    
+    - name: Build source code and Publish to JFrog Artifactory
+      id: build-publish-jFrog-artifactory 
+      run: |
+        cd ${{ steps.env.outputs.USER_WORK_SPACE_PATH }}
+        #modify maven package version
+        mvn versions:set -DnewVersion=${{ github.event.inputs.JAR_VERSION }} -s settings.xml
+        #maven package and deploy
+        mvn clean deploy -U -s settings.xml
+      
+    - name: Build source code and Publish to JFrog Artifactory result
+      id: build-publish-jFrog-artifactory-result
+      if: always() && (steps.build-publish-jFrog-artifactory.outcome != 'skipped')
+      run: |
+        if [[ '${{ steps.build-publish-jFrog-artifactory.outcome }}' == 'success' ]]
+          then 
+            echo 'Maven package success and Publish jar to jFrog artifactory success.'
+            echo 'The jar address of build is ${{ steps.env.outputs.USER_WORK_SPACE_PATH }}/${{ steps.env.outputs.JAR_STORE_LOCAL_RELATIVE_PATH }}/${{ steps.env.outputs.JAR_NAME }}-${{ github.event.inputs.JAR_VERSION }}.jar'.
+            echo 'The jar is deployed to JFrog Artifactory.The adderss is ${{ steps.env.outputs.JAR_REMOTE_STORAGE_PATH }}/${{ steps.env.outputs.JAR_NAME }}/${{ github.event.inputs.JAR_VERSION }}.'
+            echo 'Next step will build docker image.'
+          else 
+            cd ${{ github.workspace }}/${{ steps.uppercase.outputs.uppercase_account }}
+            if [[ -d ${{ steps.env.outputs.JAR_STORE_LOCAL_RELATIVE_PATH }} ]] 
+              then
+                jarPath=${{ steps.env.outputs.JAR_STORE_LOCAL_RELATIVE_PATH }}/${{ steps.env.outputs.JAR_NAME }}-${{ github.event.inputs.JAR_VERSION }}.jar
+                if [[ -e $jarPath ]] 
+                  then
+                    echo 'Publish jar to jFrog artifactory failure.'
+                  else
+                   echo 'Maven package failure.'
+                fi
+              else
+               echo 'Maven package failure.'
+            fi
+        fi

@@ -1,0 +1,13 @@
+{
+    "name": "CICD To Deploy Image Openshift Whole Workflow",
+    "description": "Github Action achieve to CICD To Deploy Image Openshift Whole Workflow.",
+    "iconName": "example-icon",
+    "categories": [
+        "Deployment"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
