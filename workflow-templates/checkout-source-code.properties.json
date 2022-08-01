@@ -1,0 +1,13 @@
+{
+    "name": "Checkout Source Code Workflow",
+    "description": "Checkout Source Code Workflow.",
+    "iconName": "example-icon",
+    "categories": [
+        "Go"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
