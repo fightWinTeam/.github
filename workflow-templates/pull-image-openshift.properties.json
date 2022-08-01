@@ -3,7 +3,7 @@
     "description": "To deploy image to openshift by pull image from artifactory.",
     "iconName": "example-icon",
     "categories": [
-        "Deployment11"
+        "Deployment"
     ],
     "filePatterns": [
         "package.json$",
