@@ -1,0 +1,13 @@
+{
+    "name": "Pull Image Openshift Workflow",
+    "description": "To deploy image to openshift by pull image from artifactory.",
+    "iconName": "example-icon",
+    "categories": [
+        "Deployment"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
