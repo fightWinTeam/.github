@@ -1,0 +1,13 @@
+{
+    "name": "Build Docker Image Workflow",
+    "description": "Use Artifactory Build file to Build docker image.",
+    "iconName": "example-icon",
+    "categories": [
+        "Docker"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}

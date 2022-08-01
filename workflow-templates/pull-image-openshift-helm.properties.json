@@ -1,0 +1,13 @@
+{
+    "name": "Deploy image to openshift with helm",
+    "description": "To deploy image to openshift with helm chart file.",
+    "iconName": "example-icon",
+    "categories": [
+        "Helm"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}

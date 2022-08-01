@@ -1,0 +1,13 @@
+{
+    "name": "Push Image Artifactory Workflow",
+    "description": "Push docker container image to artifactory.",
+    "iconName": "example-icon",
+    "categories": [
+        "Docker"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}

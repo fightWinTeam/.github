@@ -1,0 +1,17 @@
+name: helm-rollback
+on:
+  workflow_dispatch:
+    inputs:
+      OPENSHIFT_APP_NAME:
+        description: "openshift application name"
+        required: true
+        type: string
+        default: odc-githubaction-helm2
+
+jobs:
+  rollback-job:
+    runs-on: [self-hosted]
+    steps:
+      - name: rollback
+        run: |
+          helm rollback ${{ github.event.inputs.OPENSHIFT_APP_NAME }} --force

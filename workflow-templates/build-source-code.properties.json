@@ -1,0 +1,13 @@
+{
+    "name": "Build Source Code Workflow",
+    "description": "Build a package using Maven and then publish it to jfrog artifactory.",
+    "iconName": "example-icon",
+    "categories": [
+        "Build"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
