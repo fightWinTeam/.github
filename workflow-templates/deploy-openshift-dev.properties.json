@@ -6,7 +6,6 @@
         "Deployment"
     ],
     "filePatterns": [
-        "*shell*",
         "package.json$",
         "^Dockerfile",
         ".*\\.md$"
