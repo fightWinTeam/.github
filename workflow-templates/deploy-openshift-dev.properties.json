@@ -6,6 +6,6 @@
         "Deployment"
     ],
     "filePatterns": [
-        "package.json$"
+        "package.json"
     ]
 }
